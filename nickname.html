@@ -1,0 +1,178 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="description" content="昵称生成">
+    <meta name="keywords" content="随机昵称,昵称生成,搞笑昵称">
+    <title>昵称生成器</title>
+    <style>
+        textarea{
+            resize: none;
+        }
+        #image_backToIndex:hover{
+            transform: scale(1.1);
+            cursor: pointer;
+            border-radius: 24px;
+            border: 1px solid black;
+        }
+        *{
+            margin:0px 0px 0px 0px;
+            padding: 0px 0px 0px 0px;
+        }
+        .backToHome:hover{
+            transform: scale(0.98);
+            cursor: pointer;
+            border-radius: 24px;
+            border: 1px solid black;
+        }
+        a{
+            text-decoration:none;
+        }
+        .btn{
+            height: 40px;
+            width: 100%;
+            background-color:transparent;
+            border:1px solid skyblue;
+            border-radius:4px;
+
+        }
+        .btn:hover:enabled{
+            background-color:skyblue;
+            cursor: pointer;
+        }
+        .btn_copy{
+            height: 40px;
+            width: 100%;
+            background-color:transparent;
+            border:1px solid skyblue;
+            border-radius:4px;
+        }
+        .btn_copy:hover:enabled{
+            background-color:skyblue;
+            cursor: pointer;
+        }
+        li{
+            list-style: none;
+            line-height: 40px;
+
+        }
+    </style>
+</head>
+
+<body onLoad="load()" style="padding:0 15% 0 15%;min-width:500px;">
+<br/>
+
+    <div style="width:100%;">
+        <a href="index.html">
+            <img class="backToHome" style="width:60%;margin:0 20% 0 20%;" id="image_backToIndex" src="./images/logo.png">
+        </a>
+    </div>
+
+    <br/>
+        <div>
+                <button class="btn" id="btn_genNickname" onclick="genNickname()">生成昵称</button>
+
+        </div>
+    <br/>
+        <div style="display: inline-block;width: 70%;">
+            <ul>
+                <li  name="randNickname" id="nickname_1"></li>
+                <li  name="randNickname" id="nickname_2"></li>
+                <li  name="randNickname" id="nickname_3"></li>
+                <li  name="randNickname" id="nickname_4"></li>
+                <li  name="randNickname" id="nickname_5"></li>
+                <li  name="randNickname" id="nickname_6"></li>
+                <li  name="randNickname" id="nickname_7"></li>
+                <li  name="randNickname" id="nickname_8"></li>
+                <li c name="randNickname" id="nickname_9"></li>
+                <li  name="randNickname" id="nickname_10"></li>
+            </ul>
+        </div>
+        <div style="display: inline-block;width: 29%;">
+            <button class="btn_copy " style="width: 100%;" onclick='copyName("nickname_1")'>复制</button>
+            <button class="btn_copy " style="width: 100%;" onclick='copyName("nickname_2")'>复制</button>
+            <button class="btn_copy " style="width: 100%;" onclick='copyName("nickname_3")'>复制</button>
+            <button class="btn_copy " style="width: 100%;" onclick='copyName("nickname_4")'>复制</button>
+            <button class="btn_copy " style="width: 100%;" onclick='copyName("nickname_5")'>复制</button>
+            <button class="btn_copy " style="width: 100%;" onclick='copyName("nickname_6")'>复制</button>
+            <button class="btn_copy " style="width: 100%;" onclick='copyName("nickname_7")'>复制</button>
+            <button class="btn_copy " style="width: 100%;" onclick='copyName("nickname_8")'>复制</button>
+            <button class="btn_copy " style="width: 100%;" onclick='copyName("nickname_9")'>复制</button>
+            <button class="btn_copy " style="width: 100%;" onclick='copyName("nickname_10")'>复制</button>
+        </div>
+
+
+<script>
+
+    function genNickname(btn) {
+        var btn = document.getElementById("btn_genNickname");
+        btn.disabled = true;
+        var postCmd = "/getNickname";
+        //1.创建异步对象
+        var  xhr=new XMLHttpRequest();
+        //xhr.responseType = 'text';
+        //4.绑定监听，获取响应
+        xhr.onreadystatechange=function(){
+            if(xhr.readyState==4 && xhr.status==200){
+                var result=xhr.responseText.toString();
+                if(result.indexOf("RNN:") != -1){
+                //if(result.contains("RNN:")){
+                //if(result.includes("RNN:")){ //Random Nickname
+                    result = result.substring(4);
+                    var arr = result.split("-");
+                    var labelList = document.getElementsByName("randNickname");
+                    for(var i = 0;i<10;++i){
+                        labelList[i].innerHTML=arr[i].toString();
+                    }
+                    btn.disabled  = false;
+                }
+                //result = result.splice()
+            }
+        }
+        //2.创建请求
+        xhr.open("post",postCmd,true);
+        //3.发送请求
+        xhr.send();
+    }
+
+    function copyName(labelID) {
+		var label = document.getElementById(labelID);
+		var str = label.innerText;
+		if(0){
+			add2ClipBoard(str);
+		}
+		else{
+			var tmp = document.createElement('input');
+			tmp.value = str;
+			document.body.appendChild(tmp);
+			tmp.select(); // 选择对象
+			document.execCommand("Copy"); // 执行浏览器复制命令
+			tmp.className = 'tmp';
+			tmp.style.display='none';
+		}
+        
+    }
+
+    var g_clipboardData;
+    var g_fromProgram = false;
+    function add2ClipBoard(str){
+        g_clipboardData = str;
+        g_fromProgram = true;
+        document.execCommand("copy")
+    }
+    function slot_copy(e){
+        if(g_fromProgram){
+			console.log("g_clipboardData = ",g_clipboardData);
+            e.clipboardData.setData("text",g_clipboardData);
+            e.preventDefault();
+            g_fromProgram = false;
+        }
+    }
+    function load(){
+        document.addEventListener("copy",slot_copy);
+        genNickname();
+    }
+</script>
+</body>
+</html>
