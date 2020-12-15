@@ -1,0 +1,381 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="description" content="随机姓名">
+    <meta name="keywords" content="随机姓名,英文名,小说,创作助手">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>随机姓名</title>
+
+    <style>
+        *{
+            padding: 0px 0px 0px 0px;
+            margin: 0px 0px 0px 0px ;
+        }
+        textarea{
+            resize: none;
+            overflow:hidden;
+        }
+        li{
+            list-style: none;
+            line-height: 40px;
+            margin-left: 10px;
+        }
+        svg{
+            width:100% !important;
+        }
+        #image_backToIndex:hover{
+            transform: scale(1.1);
+            cursor: pointer;
+            border-radius: 24px;
+            border: 1px solid black;
+        }
+        .accordion {
+            background-color: #eee;
+            color: #444;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 15px;
+            transition: 0.4s;
+        }
+
+        .active, .accordion:hover {
+            background-color: #ccc;
+        }
+
+        .panel {
+            padding: 0 18px;
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+        }
+        select{
+            height: 40px;
+            line-height: 40px;
+        }
+        option{
+            height: 40px;
+            line-height: 40px;
+        }
+        #labelSingleFirstName, #labelDoubleFirstName{
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+        }
+        .btn{
+            height: 40px;
+            width: 100%;
+            background-color:transparent;
+            border:1px solid skyblue;
+            border-radius:4px;
+
+        }
+        .btn:hover:enabled{
+            background-color:skyblue;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body onLoad="load()" style="padding:0 22% 0 22%;min-width:854px;">
+<br/>
+<div style="width:100%;">
+    <a href="index.html">
+        <img class="backToHome" style="width:60%;margin:0 20% 0 20%;" id="image_backToIndex" src="./images/logo.png">
+    </a>
+</div>
+    <br/>
+
+<button class="accordion">生成随机姓名</button>
+<div class="panel">
+    <div style="height: 40px;width: 100%;margin-top: 10px;">
+        <div style="display: inline-block;width: 20%;">
+            <label  id="labelSingleFirstName">
+                <input type="radio" name="options_firstName" id="checkboxSingleFirstName" autocomplete="off" checked> 单姓
+            </label>
+            <label  id="labelDoubleFirstName">
+                <input type="radio" name="options_firstName" id="checkboxDoubleFirstName" autocomplete="off"> 双姓
+            </label>
+        </div>
+        <div style="display: inline-block;width: 20%;height: 100%;">
+            <select id="namePart1" style="width: 80%;height: 100%;">
+                <option value="v" selected>动词</option>
+                <option value="n">名词</option>
+                <option value="adj">形容词</option>
+                <option value="o">其他词</option>
+                <option value="all">全部</option>
+            </select>
+        </div>
+        <div style="display: inline-block;width: 20%;height: 100%;">
+            <select id="namePart2" style="width: 80%;height: 100%">
+                <option value="v" >动词</option>
+                <option value="n" selected>名词</option>
+                <option value="adj">形容词</option>
+                <option value="o">其他词</option>
+                <option value="all">全部</option>
+                <option value="null">无</option>
+            </select>
+        </div>
+        <div style="display: inline-block;width: 38%;height: 100%;">
+            <button class="btn"  id="btn_genName" onclick="genName()">生成姓名</button>
+        </div>
+    </div>
+    <div style="width: 100%;margin-top: 10px;">
+        <div style="width: 33%;height:100%;display: inline-block;">
+            <div  style="height: 100%;">
+                <textarea  style="width:80%;height: 350px;font-size: 20px;" id="textEdit_name"></textarea>
+                <button class="btn"  style="width: 80%;" onclick="copyNames()">复制</button>
+            </div>
+        </div>
+        <div style="width: 33%;height: 100%; display: inline-block;">
+            <div >
+                <ul style="margin:0 0 0 10%;">
+                    <li name="randName" id="name_1"></li>
+                    <li name="randName" id="name_2"></li>
+                    <li name="randName" id="name_3"></li>
+                    <li name="randName" id="name_4"></li>
+                    <li name="randName" id="name_5"></li>
+                    <li name="randName" id="name_6"></li>
+                    <li name="randName" id="name_7"></li>
+                    <li name="randName" id="name_8"></li>
+                    <li name="randName" id="name_9"></li>
+                    <li name="randName" id="name_10"></li>
+                </ul>
+            </div>
+        </div>
+        <div style="width: 32%; height:100%;display: inline-block;">
+            <div >
+                <button class="btn " style="width: 100%;" onclick='collectNameToTextArea("name_1")'>收录</button>
+                <button class="btn " style="width: 100%;" onclick='collectNameToTextArea("name_2")'>收录</button>
+                <button class="btn " style="width: 100%;" onclick='collectNameToTextArea("name_3")'>收录</button>
+                <button class="btn " style="width: 100%;" onclick='collectNameToTextArea("name_4")'>收录</button>
+                <button class="btn " style="width: 100%;" onclick='collectNameToTextArea("name_5")'>收录</button>
+                <button class="btn " style="width: 100%;" onclick='collectNameToTextArea("name_6")'>收录</button>
+                <button class="btn " style="width: 100%;" onclick='collectNameToTextArea("name_7")'>收录</button>
+                <button class="btn " style="width: 100%;" onclick='collectNameToTextArea("name_8")'>收录</button>
+                <button class="btn " style="width: 100%;" onclick='collectNameToTextArea("name_9")'>收录</button>
+                <button class="btn " style="width: 100%;" onclick='collectNameToTextArea("name_10")'>收录</button>
+            </div>
+        </div>
+    </div>
+    <br/>
+
+</div>
+
+<button class="accordion">生成随机英文名</button>
+<div class="panel">
+    <div style="width: 100%;margin:10px 0 10px 0;">
+        <div  style="display: inline-block;width: 20%;">
+            <label  id="label_boy">
+                <input type="radio" name="options_gender" id="option_boy" autocomplete="off" checked> 男孩
+            </label>
+            <label  id="label_gal">
+                <input type="radio" name="options_gender" id="option_girl" autocomplete="off"> 女孩
+            </label>
+
+        </div>
+        <div style="display: inline-block;width: 78%;">
+            <button class="btn btn-outline-info btn-block" id="btn_genEngName" onclick="genEnglishName()">生成英文名字</button>
+        </div>
+    </div>
+    <div style="width: 100%;">
+        <div style="display: inline-block;width: 70%;">
+            <ul >
+                <li name="randEnglishName" id="engName_1"></li>
+                <li name="randEnglishName" id="engName_2"></li>
+                <li name="randEnglishName" id="engName_3"></li>
+                <li name="randEnglishName" id="engName_4"></li>
+                <li name="randEnglishName" id="engName_5"></li>
+                <li name="randEnglishName" id="engName_6"></li>
+                <li name="randEnglishName" id="engName_7"></li>
+                <li name="randEnglishName" id="engName_8"></li>
+                <li name="randEnglishName" id="engName_9"></li>
+                <li name="randEnglishName" id="engName_10"></li>
+            </ul>
+        </div>
+
+        <div style="display: inline-block;width: 28%;">
+            <button class="btn " style="width: 100%;" onclick='copyName("engName_1")'>复制</button>
+            <button class="btn " style="width: 100%;" onclick='copyName("engName_2")'>复制</button>
+            <button class="btn " style="width: 100%;" onclick='copyName("engName_3")'>复制</button>
+            <button class="btn " style="width: 100%;" onclick='copyName("engName_4")'>复制</button>
+            <button class="btn " style="width: 100%;" onclick='copyName("engName_5")'>复制</button>
+            <button class="btn " style="width: 100%;" onclick='copyName("engName_6")'>复制</button>
+            <button class="btn " style="width: 100%;" onclick='copyName("engName_7")'>复制</button>
+            <button class="btn " style="width: 100%;" onclick='copyName("engName_8")'>复制</button>
+            <button class="btn " style="width: 100%;" onclick='copyName("engName_9")'>复制</button>
+            <button class="btn " style="width: 100%;" onclick='copyName("engName_10")'>复制</button>
+        </div>
+    </div>
+
+</div>
+
+
+    <script>
+    function genName() {
+        var btn = document.getElementById("btn_genName");
+        var combobox1 = document.getElementById("namePart1");
+        var combobox2 = document.getElementById("namePart2");
+        var value1 = combobox1.options[combobox1.selectedIndex].value;
+        var value2 = combobox2.options[combobox2.selectedIndex].value;
+        //console.log("value1 = ",value1)
+        btn.disabled = true;
+        var postCmd = "/getName/"
+        var radioBtn = document.getElementById("checkboxSingleFirstName");
+        if(radioBtn.checked == true){
+            postCmd += "single_";
+        }
+        else{
+            postCmd += "double_";
+        }
+        postCmd += value1+"_and_"+value2; //single_adj_and_n
+        //1.创建异步对象
+        var  xhr=new XMLHttpRequest();
+        //4.绑定监听，获取响应
+        xhr.onreadystatechange=function(){
+            if(xhr.readyState==4 && xhr.status==200){
+                var result=xhr.responseText.toString();
+                if(result.indexOf("RN:")!= -1){
+                //if(result.includes("RN:")){
+                    result = result.substring(3);
+                    var arr = result.split("-");
+                    var labelList = document.getElementsByName("randName");
+                    for(var i = 0;i<10;++i){
+                        labelList[i].innerHTML=arr[i].toString();
+                    }
+                    btn.disabled  = false;
+                }
+                //result = result.splice()
+            }
+        }
+        //2.创建请求
+        xhr.open("post",postCmd,true);
+        //3.发送请求
+        xhr.send();
+    }
+
+    function genEnglishName() {
+        var btn = document.getElementById("btn_genEngName");
+        btn.disabled = true;
+        var radioBtn = document.getElementById("option_boy");
+        var postCmd = "/getEnglishName/boy";
+        if(radioBtn.checked == false){
+            postCmd = "/getEnglishName/girl";
+        }
+        //1.创建异步对象
+        var  xhr=new XMLHttpRequest();
+        //4.绑定监听，获取响应
+        xhr.onreadystatechange=function(){
+            if(xhr.readyState==4 && xhr.status==200){
+                var result=xhr.responseText.toString();
+                if(result.indexOf("REN:")!=-1){
+                //if(result.includes("REN:")){ //Random English Name
+                    result = result.substring(4);
+                    var arr = result.split("-");
+                    var labelList = document.getElementsByName("randEnglishName");
+                    for(var i = 0;i<10;++i){
+                        labelList[i].innerHTML=arr[i].toString();
+                    }
+                    btn.disabled  = false;
+                }
+                //result = result.splice()
+            }
+        }
+        //2.创建请求
+        xhr.open("post",postCmd,true);
+        //3.发送请求
+        xhr.send();
+    }
+    var g_textEditContent="";
+    function collectNameToTextArea(labelID){
+        var label = document.getElementById(labelID);
+        var str = label.innerText + "\n";
+        var textEdit = document.getElementById("textEdit_name");
+        //textEdit.append(str);
+        g_textEditContent += str;
+        textEdit.value = g_textEditContent;
+
+    }
+    function copyNames() {
+        var textEdit = document.getElementById("textEdit_name");
+        //var str = textEdit.textContent;
+        var str = textEdit.value;
+        if(isChrome){
+			add2ClipBoard(str);
+		}
+		else{
+			textEdit.select();
+			document.execCommand("Copy"); // 执行浏览器复制命令
+		}
+    }
+    function copyName(labelID) {
+        var label = document.getElementById(labelID);
+		var str = label.innerText;
+		if(isChrome){
+			add2ClipBoard(str);
+		}
+		else{
+			window.clipboardData.setData("text",str);
+		}
+    }
+
+    var g_clipboardData;
+    var g_fromProgram = false;
+    function add2ClipBoard(str){
+        g_clipboardData = str;
+        g_fromProgram = true;
+        document.execCommand("copy")
+    }
+    function slot_copy(e){
+        if(g_fromProgram){
+            e.clipboardData.setData("text",g_clipboardData);
+            e.preventDefault();
+            g_fromProgram = false;
+        }
+    }
+	var isIE;
+	var isChrome;
+    function load(){
+		var checkboxFirstName = document.getElementById("checkboxSingleFirstName");
+		checkboxFirstName.checked = true;
+        genName();
+		genEnglishName();
+		
+		var userAgent = navigator.userAgent;
+		var isOpera = userAgent.indexOf("Opera") > -1; 
+		isIE = userAgent.indexOf("compatible") > -1
+            && userAgent.indexOf("MSIE") > -1 && !isOpera;
+		var isEdge = userAgent.indexOf("Edge") > -1; 
+		var isFF = userAgent.indexOf("Firefox") > -1;
+		var isSafari = userAgent.indexOf("Safari") > -1
+            && userAgent.indexOf("Chrome") == -1; 
+		isChrome = userAgent.indexOf("Chrome") > -1
+            && userAgent.indexOf("Safari") > -1;
+		if(isChrome){
+			//console.log("you are using Chrome");
+			document.addEventListener("copy",slot_copy);
+		}
+    }
+    var accordion = document.getElementsByClassName("accordion");
+    var g_accrodionIndex;
+
+    for (g_accrodionIndex = 0; g_accrodionIndex < accordion.length; g_accrodionIndex++) {
+        accordion[g_accrodionIndex].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var panel = this.nextElementSibling;
+            if (panel.style.maxHeight) {
+                panel.style.maxHeight = null;
+            } else {
+                panel.style.maxHeight = panel.scrollHeight + "px";
+            }
+        });
+    }
+</script>
+</body>
+</html>
