@@ -147,8 +147,8 @@
         if(radioBtn.checked == true)  postCmd += "_fill";
         else postCmd += "_noFill";
 		var radioBtn_land = document.getElementById("radioBtnSingleLand");
-		if(radioBtn_land.checked == true) postCmd += "singleLand";
-		else postCmd += "multiLand";
+		if(radioBtn_land.checked == true) postCmd += "_singleLand";
+		else postCmd += "_multiLand";
         //1.创建异步对象
         var  xhr=new XMLHttpRequest();
         //4.绑定监听，获取响应
