@@ -65,8 +65,50 @@
 		  box-shadow: 0px 0px 32px hsla(150, 100%, 50%, 0.75);
 
 		}
+		.myCheckbox {
+			width: 100%;
+			display: flex;
+			align-items: center;
+			user-select: none;
+		}
+		.myCheckbox > label {
+			font-size: 25px;
+			color: black;
+			padding-left: 0px;
+			line-height:25px;
+			cursor: pointer;
+			border: none;
+		}
 
+		input[type=checkbox] {
+			display:none;
+		}
+		input[type=checkbox]:checked + span{
+			background-color: #00EA90;
+		}
 
+		.spanForCheckbox {
+			width: 20px;
+			height: 20px;
+			border-radius: 25%;
+			background-color: transparent;
+			border: 2px solid #00EA90;
+
+		}
+		div{
+			vertical-align:middle;
+		}
+		fieldset{
+			border-color:ghostwhite;
+		}
+		fieldset > legend{
+			line-height:17px;
+			font-size:15px;
+			height:17px;
+			border:1px solid gray;
+			border-radius:8px;
+			background:ghostwhite;
+		}
     </style>
 </head>
 
@@ -81,22 +123,96 @@
 	<div style="width:100%;">
 		<button class="btn" style="width:10%;" disabled="true" id="btn_png" onclick="downloadPng(this)">下载PNG</button>
 		<button class="btn" style="width:10%;" disabled="true" id="btn_svg" onclick="downloadSvg(this)">下载SVG</button>
-		<div style="display: inline-block;width: 14%;">
-			<input type="radio" name="opt_fillColor" id="radioBtnFillColor" value="" checked/>
-			<label for="radioBtnFillColor">着色</label>
-
-			<input type="radio" name="opt_fillColor" id="radioBtnNoFillColor" />
-			<label for="radioBtnNoFillColor">线条</label>
-        </div>
-		<div style="display: inline-block;width: 14%;">
-			<input type="radio" name="opt_landAmount" id="radioBtnSingleLand" value="" checked/>
-			<label for="radioBtnSingleLand">单陆</label>
-
-			<input type="radio" name="opt_landAmount" id="radioBtnMultiLand" />
-			<label for="radioBtnMultiLand">多陆</label>
-		</div>
-		<button class="btn" style="width:42%;" onclick="genContinent(this)">生成新世界</button>
+		<button class="btn" style="width:39%;" onclick="genLocalWorld(this)">生成局部地图</button>
+		<button class="btn" style="width:39%;" onclick="genContinent(this)">生成世界地图</button>
 	</div>
+	<div style="width:100%">
+		<fieldset style="width:100%">
+			<legend>通用设置</legend>
+			
+				<div style="display: inline-block;width: 14%;margin-bottom:4px;">
+					<input type="radio" name="opt_fillColor" id="radioBtnFillColor" value="" checked/>
+					<label for="radioBtnFillColor">着色</label>
+
+					<input type="radio" name="opt_fillColor" id="radioBtnNoFillColor" />
+					<label for="radioBtnNoFillColor">线条</label>
+				</div>
+				
+				<div style="display: inline-block;width: 17%;">
+					<div class="myCheckbox">
+						<input id="showKingdom" type="checkbox">
+						<span class="spanForCheckbox"></span>
+						<label for="showKingdom">显示诸侯</label>
+					</div>
+				</div>
+				<div style="display: inline-block;width: 17%;">
+					<div class="myCheckbox">
+						<input id="showRiver" type="checkbox">
+						<span class="spanForCheckbox"></span>
+						<label for="showRiver">显示河流</label>
+					</div>
+				</div>
+				<div style="display: inline-block;width: 17%;">
+					<div class="myCheckbox">
+						<input id="showTemperature" type="checkbox">
+						<span class="spanForCheckbox"></span>
+						<label for="showTemperature">显示温度</label>
+					</div>
+				</div>
+				<div style="display: inline-block;width: 17%;">
+					<div class="myCheckbox">
+						<input id="showMountain" type="checkbox">
+						<span class="spanForCheckbox"></span>
+						<label for="showMountain">显示山脉</label>
+					</div>
+				</div>
+			
+		</fieldset>
+		<fieldset style="width:100%">
+			<legend>世界地图设置</legend>
+			
+				<div style="display: inline-block;width: 28%;margin-bottom:4px;">
+					<input type="radio" name="opt_landAmount" id="radioBtnSingleLand" value="" checked/>
+					<label for="radioBtnSingleLand">单块大陆</label>
+
+					<input type="radio" name="opt_landAmount" id="radioBtnMultiLand" />
+					<label for="radioBtnMultiLand">多块大陆</label>
+				</div>
+				
+			
+		</fieldset>
+		<fieldset style="width:100%">
+			<legend>局部地图设置</legend>
+			<div style="display:inline-block;font-size:18px;line-height:25px;border:1px solid black;border-radius:12px;
+			background:ghostwhite;">海岸线位置:</div>
+			
+			
+			<div style="display: inline-block;width: 80%;margin-bottom:4px;">
+				<input type="radio" name="opt_coastDir" id="radioBtnNoCoast" checked/>
+				<label for="radioBtnNoCoast">无海岸线</label>
+				<input type="radio" name="opt_coastDir" id="radioBtnCoastNorth"/>
+				<label for="radioBtnCoastNorth">北侧</label>
+
+				<input type="radio" name="opt_coastDir" id="radioBtnCoastSouth" />
+				<label for="radioBtnCoastSouth">南侧</label>
+				<input type="radio" name="opt_coastDir" id="radioBtnCoastWest" />
+				<label for="radioBtnCoastWest">西侧</label>
+				<input type="radio" name="opt_coastDir" id="radioBtnCoastEast" />
+				<label for="radioBtnCoastEast">东侧</label>
+				
+				<input type="radio" name="opt_coastDir" id="radioBtnCoastNorthEast" />
+				<label for="radioBtnCoastNorthEast">东北</label>
+				<input type="radio" name="opt_coastDir" id="radioBtnSouthEast" />
+				<label for="radioBtnSouthEast">东南</label>
+				<input type="radio" name="opt_coastDir" id="radioBtnNorthWest" />
+				<label for="radioBtnNorthWest">西北</label>
+				<input type="radio" name="opt_coastDir" id="radioBtnSouthWest" />
+				<label for="radioBtnSouthWest">西南</label>
+			</div>
+			
+		</fieldset>
+	</div>
+	
     <br/>
 
     <div  id="div_svg_map" style="width:100%;" >
@@ -135,6 +251,9 @@
         //3.发送请求
         xhr.send();
     }
+    function genLocalWorld(btn){
+
+	}
     function genContinent(btn) {
         btn.disabled = true;
 		var btn_png = document.getElementById("btn_png");
@@ -149,6 +268,15 @@
 		var radioBtn_land = document.getElementById("radioBtnSingleLand");
 		if(radioBtn_land.checked == true) postCmd += "_singleLand";
 		else postCmd += "_multiLand";
+		var checkbox_kingdom = document.getElementById("showKingdom");
+		if(checkbox_kingdom.checked == true) postCmd += "_showKingdom";
+		var checkbox_river = document.getElementById("showRiver");
+		if(checkbox_river.checked == true) postCmd += "_showRiver";
+		var checkbox_temperature = document.getElementById("showTemperature");
+		if(checkbox_temperature.checked == true) postCmd += "_showTemperature";
+		var checkbox_mountain = document.getElementById("showMountain");
+		if(checkbox_mountain.checked == true) postCmd += "_showMountain";
+		console.log("postcmd = " ,postCmd);
         //1.创建异步对象
         var  xhr=new XMLHttpRequest();
         //4.绑定监听，获取响应
