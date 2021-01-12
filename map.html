@@ -202,12 +202,12 @@
 				
 				<input type="radio" name="opt_coastDir" id="radioBtnCoastNorthEast" />
 				<label for="radioBtnCoastNorthEast">东北</label>
-				<input type="radio" name="opt_coastDir" id="radioBtnSouthEast" />
-				<label for="radioBtnSouthEast">东南</label>
-				<input type="radio" name="opt_coastDir" id="radioBtnNorthWest" />
-				<label for="radioBtnNorthWest">西北</label>
-				<input type="radio" name="opt_coastDir" id="radioBtnSouthWest" />
-				<label for="radioBtnSouthWest">西南</label>
+				<input type="radio" name="opt_coastDir" id="radioBtnCoastSouthEast" />
+				<label for="radioBtnCoastSouthEast">东南</label>
+				<input type="radio" name="opt_coastDir" id="radioBtnCoastNorthWest" />
+				<label for="radioBtnCoastNorthWest">西北</label>
+				<input type="radio" name="opt_coastDir" id="radioBtnCoastSouthWest" />
+				<label for="radioBtnCoastSouthWest">西南</label>
 			</div>
 			
 		</fieldset>
@@ -252,22 +252,14 @@
         xhr.send();
     }
     function genLocalWorld(btn){
-
-	}
-    function genContinent(btn) {
-        btn.disabled = true;
+		btn.disabled = true;
 		var btn_png = document.getElementById("btn_png");
 		var btn_svg = document.getElementById("btn_svg");
 		btn_png.disabled = true;
 		btn_svg.disabled = true;
-		
+		var postCmd = "/getRegion";
 		var radioBtn = document.getElementById("radioBtnFillColor");
-		var postCmd = "/getContinent";
         if(radioBtn.checked == true)  postCmd += "_fill";
-        else postCmd += "_noFill";
-		var radioBtn_land = document.getElementById("radioBtnSingleLand");
-		if(radioBtn_land.checked == true) postCmd += "_singleLand";
-		else postCmd += "_multiLand";
 		var checkbox_kingdom = document.getElementById("showKingdom");
 		if(checkbox_kingdom.checked == true) postCmd += "_showKingdom";
 		var checkbox_river = document.getElementById("showRiver");
@@ -276,7 +268,112 @@
 		if(checkbox_temperature.checked == true) postCmd += "_showTemperature";
 		var checkbox_mountain = document.getElementById("showMountain");
 		if(checkbox_mountain.checked == true) postCmd += "_showMountain";
-		console.log("postcmd = " ,postCmd);
+		//var radioBtnCoastPos = document
+		while(1){
+			var coastNone = document.getElementById("radioBtnNoCoast");
+			if(coastNone.checked == true) {
+				postCmd += "_coast:none";
+				break;
+			}
+			var coastNorth = document.getElementById("radioBtnCoastNorth");
+			if(coastNorth.checked == true) {
+				postCmd += "_coast:north";
+				break;
+			}
+			var coastSouth = document.getElementById("radioBtnCoastSouth");
+			if(coastSouth.checked == true) {
+				postCmd += "_coast:south";
+				break;
+			}
+			var coastWest = document.getElementById("radioBtnCoastWest");
+			if(coastWest.checked == true) {
+				postCmd += "_coast:west";
+				break;
+			}
+			var coastEast = document.getElementById("radioBtnCoastEast");
+			if(coastEast.checked == true) {
+				postCmd += "_coast:east";
+				break;
+			}
+			var coastNE = document.getElementById("radioBtnCoastNorthEast");
+			if(coastNE.checked == true) {
+				postCmd += "_coast:north-east";
+				break;
+			}
+			var coastSE = document.getElementById("radioBtnCoastSouthEast");
+			if(coastSE.checked == true) {
+				postCmd += "_coast:south-east";
+				break;
+			}
+			var coastNW = document.getElementById("radioBtnCoastNorthWest");
+			if(coastNW.checked == true) {
+				postCmd += "_coast:north-west";
+				break;
+			}
+			//var coastSW = document.getElementById("radioBtnCoastSouthWest");
+			postCmd += "_coast:south-west";
+			break;
+		}
+		
+		var  xhr=new XMLHttpRequest();
+        //4.绑定监听，获取响应
+        xhr.onreadystatechange=function(){
+            if(xhr.readyState==4 && xhr.status==200){
+                var mapFrame = document.getElementById("div_svg_map");
+                g_svg_data = xhr.responseText;
+                var idx = g_svg_data.search('>');
+                //<id=3><viewbox=4000*4000>
+                g_svgID = g_svg_data.substr(4,idx - 4);
+                g_svg_data = g_svg_data.substr(idx+10);//10 == strlen("><viewbox=")
+                var str,w , h;
+                idx = g_svg_data.search(">");
+                str = g_svg_data.substr(0,idx);
+                str = str.split("*");
+				//console.log("str = ",str);
+                w = str[0];
+                h = str[1];
+                //console.log("w = ",w,"h = ",h);
+                g_svg_data = g_svg_data.substr(idx + 1); //g_svg_data is normal svg file
+                idx = g_svg_data.search("xmlns=");
+                var webdata = g_svg_data.substr(idx);
+                //<svg viewbox="0 0 4000 2000"
+                str = '<svg viewbox="0 0 ';
+                str += w.toString() + ' ' + h.toString() +'"';
+                webdata = str + webdata;
+                mapFrame.innerHTML = webdata;
+                //console.log("svg id = ",g_svgID);
+                getPngData();
+                btn.disabled  = false;
+                var btn_svg = document.getElementById("btn_svg");
+                btn_svg.disabled = false;
+            }
+        }
+        //2.创建请求
+        xhr.open("post",postCmd,true);
+        //3.发送请求
+        xhr.send();
+	}
+    function genContinent(btn) {
+        btn.disabled = true;
+		var btn_png = document.getElementById("btn_png");
+		var btn_svg = document.getElementById("btn_svg");
+		btn_png.disabled = true;
+		btn_svg.disabled = true;
+		
+		var postCmd = "/getContinent";
+		var radioBtn = document.getElementById("radioBtnFillColor");
+        if(radioBtn.checked == true)  postCmd += "_fill";
+		var radioBtn_land = document.getElementById("radioBtnSingleLand");
+		if(radioBtn_land.checked == true) postCmd += "_singleLand";
+		var checkbox_kingdom = document.getElementById("showKingdom");
+		if(checkbox_kingdom.checked == true) postCmd += "_showKingdom";
+		var checkbox_river = document.getElementById("showRiver");
+		if(checkbox_river.checked == true) postCmd += "_showRiver";
+		var checkbox_temperature = document.getElementById("showTemperature");
+		if(checkbox_temperature.checked == true) postCmd += "_showTemperature";
+		var checkbox_mountain = document.getElementById("showMountain");
+		if(checkbox_mountain.checked == true) postCmd += "_showMountain";
+		//console.log("postCmd = " ,postCmd);
         //1.创建异步对象
         var  xhr=new XMLHttpRequest();
         //4.绑定监听，获取响应
